@@ -29,11 +29,11 @@ graph TB
     Start([PDF Circular]) --> Stage1
     
     subgraph Stage1[" Stage 1: PDF Conversion "]
-        PDF[PDF Input] --> Choice{Conversion Provider?}
-        Choice -->|Local| Docling[Docling Converter]
-        Choice -->|Cloud| GeminiConvert[Gemini Files API]
-        Docling --> MD[Markdown Output]
-        GeminiConvert --> MD
+        PDF[PDF Input] --> Choice{Conversion Provider}
+        Choice -->|Docling| DoclingSys[Docling Converter]
+        Choice -->|Gemini| GeminiAPI[Gemini Files API]
+        DoclingSys --> MD[Markdown Output]
+        GeminiAPI --> MD
         MD --> Meta[Metadata: Pages, Tables, Structure]
     end
     
@@ -61,7 +61,7 @@ graph TB
     TrackB_JSON --> Stage3
     MD --> Stage3
     
-    subgraph Stage3[" Stage 3: Consensus & Validation "]
+    subgraph Stage3[" Stage 3: AI Consensus "]
         Merge[AI-Powered Merger] --> LLM_C[LLM Model<br/>Consensus Engine]
         LLM_C --> Dedup[Deduplication]
         Dedup --> Validate[Conflict Resolution]
@@ -71,6 +71,7 @@ graph TB
     
     Final --> Output([Structured JSON Output<br/>Ready for Knowledge Graphs & APIs])
 ```
+
 
 
 
