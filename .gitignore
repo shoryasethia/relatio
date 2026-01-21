@@ -42,7 +42,8 @@ env/
 Thumbs.db
 
 # Internal documentation (not for submission)
-VIDEO_TALKING_POINTS.md
+*.md
+!README.md
 list_models.py
 pyproject.toml
 download_samples.py
