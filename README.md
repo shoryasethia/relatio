@@ -98,11 +98,8 @@ graph TB
 
 ```powershell
 # If cloning from repository
-git clone <your-repo-url>
+git clone https://github.com/shoryasethia/relatio
 cd relatio
-
-# Or simply navigate to downloaded folder
-cd path\to\relatio
 ```
 
 **Step 2: Create Virtual Environment**
@@ -428,7 +425,7 @@ Traditional RAG (Retrieval-Augmented Generation) has fundamental limitations for
 
 ### Our Solution: Dual-Track Agentic Extraction
 
-Inspired by **[agentic-file-search](https://github.com/PromtEngineer/agentic-file-search)** and **LLM council** / **prompt engineering ensemble** techniques, we use:
+Inspired by **[agentic-file-search](https://github.com/PromtEngineer/agentic-file-search)** and **[LLM council](https://github.com/karpathy/llm-council)** , I use:
 
 **Track A (Global Context):**
 - Analyzes the **entire document** without chunking
@@ -463,6 +460,8 @@ Inspired by **[agentic-file-search](https://github.com/PromtEngineer/agentic-fil
 ## Example Execution
 
 Here's a real extraction run on a 10-page SEBI circular using `gemini-2.5-flash`:
+
+**View the complete example output:** [output/1767957683485](https://github.com/shoryasethia/relatio/tree/main/output/1767957683485)
 
 ```powershell
 (.venv) PS C:\Users\shory\Desktop\relatio> python main.py .\samples\1767957683485.pdf
@@ -525,7 +524,7 @@ Here's a real extraction run on a 10-page SEBI circular using `gemini-2.5-flash`
 
 ### Performance Notes
 
-- **Document:** 10 pages
+- **Document:** 10 pages ([sample PDF](https://github.com/shoryasethia/relatio/blob/main/samples/1767957683485.pdf))
 - **Total Time:** ~2.5 minutes
 - **Model:** gemini-2.5-flash
 - **References Found:** 5 unique references (deduplicated from 10 total findings)
@@ -535,40 +534,27 @@ Here's a real extraction run on a 10-page SEBI circular using `gemini-2.5-flash`
 
 ## Testing
 
-### Download Sample Circulars
-
-**Option 1: Manual Download**
-
-1. Visit [SEBI Circulars](https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0)
-2. Download a Master Circular (these have many references)
-3. Save to `samples\` directory
-
-**Option 2: Use Helper Script**
+Run extraction on a SEBI circular PDF:
 
 ```powershell
-python download_samples.py
+# Basic usage
+python main.py path\to\sebi_circular.pdf
+
+# With debug logging
+python main.py path\to\sebi_circular.pdf --debug
+
+# Custom output directory
+python main.py path\to\sebi_circular.pdf --output results\
 ```
 
-This provides instructions for downloading circulars directly from SEBI's website.
-
-### Run Extraction
+### View Results
 
 ```powershell
-# Process a sample circular
-python main.py samples\your_circular.pdf
-
-# View results
-type output\your_circular\your_circular_final.json
-```
-
-### Verify Output
-
-```powershell
-# Check final results (Windows)
-type output\your_circular\your_circular_final.json
+# Check final output (Windows)
+type output\<pdf_name>\<pdf_name>_final.json
 
 # Or use PowerShell for formatted output
-Get-Content output\your_circular\your_circular_final.json | ConvertFrom-Json | ConvertTo-Json -Depth 10
+Get-Content output\<pdf_name>\<pdf_name>_final.json | ConvertFrom-Json | ConvertTo-Json -Depth 10
 ```
 
 ---
@@ -613,71 +599,12 @@ Get-Content output\your_circular\your_circular_final.json | ConvertFrom-Json | C
    - Processing time increases 3-5x
    - **Mitigation:** Use high-quality PDFs when available
 
-4. **Processing Time** (4-5 minutes per document)
-   - Not suitable for real-time applications
-   - **Mitigation:** Batch processing, parallel execution
+4. **Processing Time** (~2.5 minutes per document)
+   - Single-PDF processing focus per assignment requirements
 
-5. **API Rate Limits** (Free tier: 1,500 requests/day)
-   - ~150 documents per day maximum on free tier
-   - **Mitigation:** Upgrade to paid tier for production scale
-
----
-
-## Scaling & Downstream Applications
-
-The structured JSON output can be used for various downstream tasks:
-
-### Batch Processing
-
-Process all SEBI circulars in bulk:
-
-```powershell
-# PowerShell script for batch processing
-Get-ChildItem sebi_circulars\*.pdf | ForEach-Object {
-    python main.py $_.FullName
-}
-```
-
-### Knowledge Graph Construction
-
-The JSON output is designed for easy import into graph databases:
-
-- **Nodes:** `source_document` and `references` become circular nodes
-- **Edges:** `relationship_type` defines edge types (SUPERSEDES, AMENDS, etc.)
-- **Properties:** `confidence_score`, `page_numbers`, `context_paragraph`, etc.
-
-### API Integration
-
-Build RESTful APIs or GraphQL endpoints on top of the JSON data:
-
-```python
-# Example: Query evolved circulars
-GET /api/circular/{sebi_ref}/supersedes
-# Returns: All circulars superseded by this one
-
-# Example: Find all references
-GET /api/circular/{sebi_ref}/references  
-# Returns: All regulatory documents referenced
-
-# Example: Trace evolution
-GET /api/circular/{sebi_ref}/evolution
-# Returns: Complete chain of regulatory evolution
-```
-
-### Compliance Workflows
-
-- **Regulatory monitoring** - Track new circulars and their impacts
-- **Impact analysis** - Understand which circulars are affected by changes
-- **Compliance reporting** - Generate reports on regulatory dependencies
-- **Search & discovery** - Full-text search across circular corpus
-
-### Data Storage Options
-
-The JSON format can be imported into:
-- **Document databases** - MongoDB, CouchDB (native JSON support)
-- **Relational databases** - PostgreSQL JSONB, MySQL JSON columns
-- **Graph databases** - Neo4j, ArangoDB, Amazon Neptune
-- **Search engines** - Elasticsearch, OpenSearch (indexed JSON)
+5. **API Rate Limits** (Free tier: 2 RPM, 5.2K TPM)
+   - With rate limits: 2 requests/min, 3 requests/day for free tier
+   - **Mitigation:** Upgrade to paid tier for higher quotas
 
 ---
 
@@ -686,27 +613,25 @@ The JSON format can be imported into:
 ```
 relatio/
 ├── .env.example              # Environment template
-├── .env                      # Your configuration (create from example)
+├── .gitignore                # Git ignore rules
 ├── README.md                 # This file
 ├── requirements.txt          # Python dependencies
 ├── requirements-lock.txt     # Locked dependency versions
-├── pyproject.toml            # Project metadata
 ├── main.py                   # 🎯 Pipeline orchestrator (start here)
-├── convert_pdf.py            # Stage 1: PDF → Markdown (Docling)
+├── convert_pdf.py            # Stage 1: PDF → Markdown
 ├── extract_global.py         # Stage 2A: Global context (Track A)
 ├── extract_agentic.py        # Stage 2B: Agentic search (Track B)
 ├── merge_consensus.py        # Stage 3: Consensus validation
 ├── models.py                 # Pydantic data models (output schema)
 ├── utils.py                  # Shared utilities (logging, JSON, etc.)
-├── download_samples.py       # Helper to download SEBI circulars
-├── list_models.py            # List available Gemini models
-├── samples/                  # Test PDFs (auto-created)
+├── samples/                  # Test PDFs
+│   └── 1767957683485.pdf     # Example SEBI circular
 └── output/                   # Extraction results (auto-created)
-    └── <pdf_name>/
-        ├── <pdf_name>.md
-        ├── <pdf_name>_track_a.json
-        ├── <pdf_name>_track_b.json
-        └── <pdf_name>_final.json  ⭐
+    └── 1767957683485/
+        ├── 1767957683485.md
+        ├── 1767957683485_track_a.json
+        ├── 1767957683485_track_b.json
+        └── 1767957683485_final.json  ⭐
 ```
 
 ---
@@ -726,12 +651,6 @@ relatio/
 - Ensure PDF is not corrupted
 - Verify file extension is `.pdf`
 
-### "Docling conversion failed"
-
-- PDF may be corrupted or password-protected
-- Try enabling OCR: `ENABLE_OCR=true` in `.env`
-- Check PDF has actual text (not just scanned image)
-
 ### Low reference count / Missing references
 
 1. Enable debug logging:
@@ -744,9 +663,7 @@ relatio/
    - `*_track_b.json` - What Track B found
    - Compare with source PDF
 
-3. Verify PDF quality (not low-resolution scan)
-
-4. For scanned PDFs, enable OCR:
+3. For scanned PDFs, enable OCR:
    ```env
    ENABLE_OCR=true
    ```
@@ -804,7 +721,7 @@ See [requirements.txt](file:///c:/Users/shory/Desktop/relatio/requirements.txt) 
 
 ## License
 
-MIT License - See LICENSE file for details
+GPL-3.0 License - See [LICENSE](https://github.com/shoryasethia/relatio/blob/main/LICENSE) file for details
 
 ---
 

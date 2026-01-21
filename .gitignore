@@ -45,6 +45,7 @@ Thumbs.db
 VIDEO_TALKING_POINTS.md
 list_models.py
 pyproject.toml
+download_samples.py
 
 # Logs
 *.log
