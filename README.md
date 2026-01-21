@@ -29,9 +29,12 @@ graph TB
     Start([PDF Circular]) --> Stage1
     
     subgraph Stage1[" Stage 1: PDF Conversion "]
-        PDF[PDF Input] --> Docling[Docling Converter]
+        PDF[PDF Input] --> Choice{Conversion Provider?}
+        Choice -->|Local| Docling[Docling Converter]
+        Choice -->|Cloud| GeminiConvert[Gemini Files API]
         Docling --> MD[Markdown Output]
-        Docling --> Meta[Metadata: Pages, Tables, Structure]
+        GeminiConvert --> MD
+        MD --> Meta[Metadata: Pages, Tables, Structure]
     end
     
     MD --> Split{Dual-Track Processing}
@@ -68,6 +71,7 @@ graph TB
     
     Final --> Output([Structured JSON Output<br/>Ready for Knowledge Graphs & APIs])
 ```
+
 
 
 ### Why Dual-Track?
@@ -211,11 +215,6 @@ Choose any Gemini models available in your API tier:
 TRACK_A_MODEL=gemini-2.0-flash-exp      # Global context extraction
 TRACK_B_MODEL=gemini-2.0-flash-exp      # Agentic search
 CONSENSUS_MODEL=gemini-2.0-flash-exp    # Consensus validation
-
-# Or use other models like:
-# - gemini-1.5-pro
-# - gemini-1.5-flash
-# - gemini-2.0-flash-thinking-exp
 ```
 
 ### Optional Configuration (with defaults)
@@ -357,10 +356,28 @@ Each reference includes rich metadata for knowledge graph construction:
 
 ### Stage 1: PDF to Markdown
 
-- **Tool:** Docling library (IBM Research)
-- **Process:** Converts PDF to structured markdown
-- **Preserves:** Tables, page numbers, document hierarchy
-- **Output:** Clean markdown for LLM processing
+You can choose between two conversion providers via `.env` configuration:
+
+**Option A: Docling (Local)**
+- **Tool:** Docling library from IBM Research
+- **Process:** Converts PDF locally on your machine
+- **Pros:** High-quality table preservation, works offline, no API costs
+- **Cons:** Slower on CPU without GPU acceleration
+- **Use when:** You need maximum table accuracy or want offline processing
+
+**Option B: Gemini Files API (Cloud)**
+- **Tool:** Google Gemini Files API with LLM-powered conversion
+- **Process:** Uploads PDF to Gemini, uses AI to convert to markdown
+- **Pros:** Fast, good structure preservation, cloud processing
+- **Cons:** Requires API key, uses API quota, needs internet
+- **Use when:** You want faster processing and have API access
+
+**Both methods:**
+- Preserve page numbers and document hierarchy
+- Output clean markdown for LLM processing
+- Maintain metadata (pages, tables, structure)
+
+**Configuration:** Set `CONVERSION_PROVIDER=docling` or `CONVERSION_PROVIDER=gemini` in `.env`
 
 ### Stage 2A: Global Context (Track A)
 
