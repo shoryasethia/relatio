@@ -67,13 +67,8 @@ graph TB
     end
     
     Final --> Output([Structured JSON Output<br/>Ready for Knowledge Graphs & APIs])
-    
-    style Stage1 fill:#e1f5ff
-    style Stage2A fill:#fff4e6
-    style Stage2B fill:#f3e5f5
-    style Stage3 fill:#e8f5e9
-    style Final fill:#ffd700,stroke:#333,stroke-width:3px
 ```
+
 
 ### Why Dual-Track?
 

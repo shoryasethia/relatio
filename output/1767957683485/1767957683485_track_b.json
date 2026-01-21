@@ -1,0 +1,60 @@
+{
+  "track": "B",
+  "method": "agentic_exploration_with_tools",
+  "model": "gemini-2.5-flash",
+  "source": "output\\1767957683485\\1767957683485.md",
+  "strategy": "multi_step_tool_based_exploration",
+  "references_found": 5,
+  "references": [
+    {
+      "referenced_document_title": "Review of Framework to address the ‘technical glitches’ in Stock Brokers' Electronic Trading Systems",
+      "referenced_sebi_number": "HO/38/44/12(1)2026-MIRSD-TPD1",
+      "referenced_date": "January 09, 2026",
+      "document_type": "Circular",
+      "relationship_type": "Current Document",
+      "exact_citation_text": "HO/38/44/12(1)2026-MIRSD-TPD1 January 09, 2026",
+      "context_paragraph": "Sub: - Review of Framework to address the ‘technical glitches' in Stock Brokers' Electronic Trading Systems'",
+      "section_location": "Page 1, Header"
+    },
+    {
+      "referenced_document_title": "Comprehensive framework to address the technical glitches in stock brokers' electronic trading systems",
+      "referenced_sebi_number": "SEBI/HO/MIRSD/TPD-1/P/CIR/2022/160",
+      "referenced_date": "November 25, 2022",
+      "document_type": "Circular",
+      "relationship_type": "Superseded",
+      "exact_citation_text": "Circular No. SEBI/HO/MIRSD/TPD-1/P/CIR/2022/160 dated November 25, 2022",
+      "context_paragraph": "SEBI vide Circular No. SEBI/HO/MIRSD/TPD-1/P/CIR/2022/160 dated November 25, 2022 laid down a comprehensive framework to address the technical glitches in stock brokers' electronic trading systems.",
+      "section_location": "Page 1, Para 1"
+    },
+    {
+      "referenced_document_title": "Detailed guidelines in this regard (Technical Glitches)",
+      "referenced_sebi_number": null,
+      "referenced_date": "December 16, 2022",
+      "document_type": "Guidelines",
+      "relationship_type": "Related/Subsequent",
+      "exact_citation_text": "Stock Exchanges also issued detailed guidelines in this regard on December 16, 2022",
+      "context_paragraph": "Subsequently, Stock Exchanges also issued detailed guidelines in this regard on December 16, 2022.",
+      "section_location": "Page 1, Para 1"
+    },
+    {
+      "referenced_document_title": "Securities and Exchange Board of India Act 1992",
+      "referenced_sebi_number": "Section 11 (1)",
+      "referenced_date": "1992",
+      "document_type": "Act",
+      "relationship_type": "Legal Authority",
+      "exact_citation_text": "Section 11 (1) of the Securities and Exchange Board of India Act 1992",
+      "context_paragraph": "This circular is being issued in exercise of powers conferred under Section 11 (1) of the Securities and Exchange Board of India Act 1992...",
+      "section_location": "Page 7, Para 16"
+    },
+    {
+      "referenced_document_title": "SEBI (Stock Brokers) Regulations 2026",
+      "referenced_sebi_number": "Regulation 50",
+      "referenced_date": "2026",
+      "document_type": "Regulation",
+      "relationship_type": "Legal Authority",
+      "exact_citation_text": "Regulation 50 of SEBI (Stock Brokers) Regulations 2026",
+      "context_paragraph": "...and Regulation 50 of SEBI (Stock Brokers) Regulations 2026, to protect the interests of investors in securities and to promote the development of, and to regulate the securities market.",
+      "section_location": "Page 7, Para 16"
+    }
+  ]
+}
