@@ -715,7 +715,7 @@ Free tier: 1,500 requests/day (~150 documents)
 - **tqdm** ≥4.66.0 - Progress bars
 - **reportlab** ≥4.4.7 - PDF utilities
 
-See [requirements.txt](file:///c:/Users/shory/Desktop/relatio/requirements.txt) for complete list.
+See [requirements.txt](https://github.com/shoryasethia/relatio/blob/main/requirements.txt) for complete list.
 
 ---
 
