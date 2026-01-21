@@ -1,0 +1,34 @@
+# ============================================================================
+# SEBI Circular Reference Extraction Pipeline - Dependencies
+# ============================================================================
+# Install: pip install -r requirements.txt
+# Or:      uv pip install -r requirements.txt
+# ============================================================================
+
+# Core - PDF Processing
+docling>=2.55.0
+
+# LLM API
+google-generativeai>=0.8.0
+google-genai>=1.55.0
+
+# Agentic File Search Dependencies (from fs-explorer)
+llama-index-workflows>=2.11.5
+fastapi>=0.115.0
+uvicorn>=0.34.0
+websockets>=14.0
+reportlab>=4.4.7
+
+# Data Models & Validation
+pydantic>=2.0.0
+
+# Configuration
+python-dotenv>=1.0.0
+
+# Utilities
+requests>=2.31.0
+tqdm>=4.66.0
+hf_xet>=1.2.0
+
+# Agentic File Search (fs-explorer) - Install last after dependencies
+git+https://github.com/PromtEngineer/agentic-file-search.git
