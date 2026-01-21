@@ -20,10 +20,11 @@ The Head of Compliance for a major Indian bank must ensure compliance with SEBI 
 
 ---
 
-## 📹 Overview Video
+## Overview Video
 
 > **Watch this video for a high-level walkthrough of RELATIO:**
-![Video](https://github.com/shoryasethia/relatio/blob/main/overview-video.mp4)
+
+https://github.com/user-attachments/assets/afbeedd2-7f3e-41e0-ac57-cae049f64696
 
 ---
 
