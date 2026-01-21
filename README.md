@@ -20,6 +20,13 @@ The Head of Compliance for a major Indian bank must ensure compliance with SEBI 
 
 ---
 
+## 📹 Overview Video
+
+> **Watch this video for a high-level walkthrough of RELATIO:**
+![Video](https://github.com/shoryasethia/relatio/blob/main/overview-video.mp4)
+
+---
+
 ## Architecture
 
 RELATIO uses a **3-stage dual-track pipeline** for robust, high-recall reference extraction:
