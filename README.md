@@ -215,20 +215,7 @@ TRACK_B_MODEL=gemini-2.0-flash-exp      # Agentic search
 CONSENSUS_MODEL=gemini-2.0-flash-exp    # Consensus validation
 ```
 
-### Optional Configuration (with defaults)
-
-```env
-# PDF Processing
-ENABLE_OCR=false                        # Enable for scanned PDFs (slower)
-PRESERVE_TABLES=true                    # Maintain table structure in markdown
-
-# Output Settings
-OUTPUT_DIR=output                       # Results directory (auto-created)
-PRETTY_JSON=true                        # Human-readable JSON formatting
-DEBUG_MODE=false                        # Detailed logging
-```
-
-See [.env.example](file:///c:/Users/shory/Desktop/relatio/.env.example) for all available options.
+See [.env.example](https://github.com/shoryasethia/relatio/blob/main/.env.example) for all available options.
 
 ---
 
@@ -381,7 +368,7 @@ You can choose between two conversion providers via `.env` configuration:
 
 - **Method:** Full-document analysis with Google File API
 - **Approach:** Uploads markdown to LLM for single-pass comprehensive extraction
-- **Strengths:** Cross-page references, implicit relationships, document-wide context
+- **Strengths:** Cross-page references, implicit relationships, document-wide context, **ideal for shorter documents**
 - **Strategy:** Leverages large context windows to understand the entire circular
 
 ### Stage 2B: Agentic Search (Track B)
@@ -392,7 +379,7 @@ You can choose between two conversion providers via `.env` configuration:
   - `parse_file` - Read document sections
   - `grep_search` - Pattern matching
   - `read_section` - Targeted content extraction
-- **Strengths:** Tables, footnotes, annexures, iterative discovery
+- **Strengths:** Tables, footnotes, annexures, iterative discovery, **document size independent**
 - **Strategy:** Agent decides where to look next based on findings
 
 ### Stage 3: Consensus Validation
@@ -423,7 +410,7 @@ Traditional RAG (Retrieval-Augmented Generation) has fundamental limitations for
 
 4. **Table structure is lost** - RAG chunking breaks tables apart, making it impossible to extract tabular references accurately.
 
-### Our Solution: Dual-Track Agentic Extraction
+### My Solution: Dual-Track Agentic Extraction
 
 Inspired by **[agentic-file-search](https://github.com/PromtEngineer/agentic-file-search)** and **[LLM council](https://github.com/karpathy/llm-council)** , I use:
 
@@ -447,7 +434,7 @@ Inspired by **[agentic-file-search](https://github.com/PromtEngineer/agentic-fil
 
 ### Why It Works Better
 
-| Aspect | Traditional RAG | Our Agentic Approach |
+| Aspect | Traditional RAG | My Agentic Approach |
 |--------|----------------|---------------------|
 | Context preservation | ❌ Lost in chunking | ✅ Full document analysis |
 | Cross-references | ❌ Invisible | ✅ Agent follows them |
@@ -459,7 +446,7 @@ Inspired by **[agentic-file-search](https://github.com/PromtEngineer/agentic-fil
 
 ## Example Execution
 
-Here's a real extraction run on a 10-page SEBI circular using `gemini-2.5-flash`:
+Here's a real extraction run on a 7-page SEBI circular using `gemini-2.5-flash`:
 
 **View the complete example output:** [output/1767957683485](https://github.com/shoryasethia/relatio/tree/main/output/1767957683485)
 
@@ -524,10 +511,10 @@ Here's a real extraction run on a 10-page SEBI circular using `gemini-2.5-flash`
 
 ### Performance Notes
 
-- **Document:** 10 pages ([sample PDF](https://github.com/shoryasethia/relatio/blob/main/samples/1767957683485.pdf))
+- **Document:** 7 pages ([sample PDF](https://github.com/shoryasethia/relatio/blob/main/samples/1767957683485.pdf))
 - **Total Time:** ~2.5 minutes
 - **Model:** gemini-2.5-flash
-- **References Found:** 5 unique references (deduplicated from 10 total findings)
+- **References Found:** 8 unique references
 - **Rate Limits:** 2 RPM, 5.2K TPM / 250K daily, 3 RPD / 20 ([view limits](https://ai.google.dev/pricing))
 
 ---
@@ -545,16 +532,6 @@ python main.py path\to\sebi_circular.pdf --debug
 
 # Custom output directory
 python main.py path\to\sebi_circular.pdf --output results\
-```
-
-### View Results
-
-```powershell
-# Check final output (Windows)
-type output\<pdf_name>\<pdf_name>_final.json
-
-# Or use PowerShell for formatted output
-Get-Content output\<pdf_name>\<pdf_name>_final.json | ConvertFrom-Json | ConvertTo-Json -Depth 10
 ```
 
 ---
@@ -592,7 +569,7 @@ Get-Content output\<pdf_name>\<pdf_name>_final.json | ConvertFrom-Json | Convert
 
 2. **Old Citation Formats** (~10-15% degradation on pre-2010 circulars)
    - Pre-2010 SEBI circulars use different reference patterns
-   - **Mitigation:** Extend regex patterns in [utils.py](file:///c:/Users/shory/Desktop/relatio/utils.py)
+   - **Mitigation:** Extend regex patterns in [utils.py](https://github.com/shoryasethia/relatio/blob/main/utils.py)
 
 3. **Scanned PDFs** (OCR-dependent accuracy)
    - Requires `ENABLE_OCR=true` in `.env`
@@ -617,7 +594,7 @@ relatio/
 ├── README.md                 # This file
 ├── requirements.txt          # Python dependencies
 ├── requirements-lock.txt     # Locked dependency versions
-├── main.py                   # 🎯 Pipeline orchestrator (start here)
+├── main.py                   # End to end pipeline
 ├── convert_pdf.py            # Stage 1: PDF → Markdown
 ├── extract_global.py         # Stage 2A: Global context (Track A)
 ├── extract_agentic.py        # Stage 2B: Agentic search (Track B)
@@ -633,63 +610,6 @@ relatio/
         ├── 1767957683485_track_b.json
         └── 1767957683485_final.json  ⭐
 ```
-
----
-
-## Troubleshooting
-
-### "GOOGLE_API_KEY not found"
-
-- Ensure `.env` file exists in project root
-- Copy from `.env.example` if missing
-- Add your actual API key: `GOOGLE_API_KEY=your_key_here`
-- Restart terminal/IDE after editing `.env`
-
-### "PDF file not found"
-
-- Check file path is correct (use absolute paths if needed)
-- Ensure PDF is not corrupted
-- Verify file extension is `.pdf`
-
-### Low reference count / Missing references
-
-1. Enable debug logging:
-   ```powershell
-   python main.py circular.pdf --debug
-   ```
-
-2. Check intermediate files in `output\<pdf_name>\`:
-   - `*_track_a.json` - What Track A found
-   - `*_track_b.json` - What Track B found
-   - Compare with source PDF
-
-3. For scanned PDFs, enable OCR:
-   ```env
-   ENABLE_OCR=true
-   ```
-
-### "Module not found: fs_explorer"
-
-The fs-explorer package installs from GitHub. If installation failed:
-
-```powershell
-# Reinstall from GitHub directly
-pip install git+https://github.com/PromtEngineer/agentic-file-search.git
-
-# Or reinstall all dependencies
-pip install -r requirements.txt --force-reinstall
-```
-
-### API Rate Limit Errors
-
-Free tier: 1,500 requests/day (~150 documents)
-
-**Solutions:**
-- Reduce processing: Process only essential circulars first
-- Upgrade to paid tier: [Google AI Studio Pricing](https://ai.google.dev/pricing)
-- Use caching: Re-run failed documents without reprocessing successful ones
-
----
 
 ## Dependencies
 
@@ -722,7 +642,3 @@ See [requirements.txt](https://github.com/shoryasethia/relatio/blob/main/require
 ## License
 
 GPL-3.0 License - See [LICENSE](https://github.com/shoryasethia/relatio/blob/main/LICENSE) file for details
-
----
-
-**Built for regulatory compliance professionals**
