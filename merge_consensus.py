@@ -325,7 +325,7 @@ def run_consensus(t_a_path, t_b_path, md_path, pdf_name, out_dir, config, p_time
     if verbose: print(f"\nStep 3: Mastering Consensus")
     t_a = load_json(t_a_path).get('references', [])
     t_b = []
-    if t_b_path and Path(t_b_path).exists():
+    if t_b_path and Path(t_b_path).is_file():
         t_b = load_json(t_b_path).get('references', [])
     elif verbose:
         print("→ Track B output unavailable; continuing with Track A only")

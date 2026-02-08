@@ -100,7 +100,6 @@ def run_pipeline(
         except Exception as e:
             print_status("Track B Result", str(e), "WARN")
             results.append(["3. Track B", "0.00s", "FAIL"])
-            track_b_path = None
         
         print()  # Add spacing after Stage 2B
         
