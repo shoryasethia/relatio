@@ -324,7 +324,11 @@ def create_final_output(merged_refs, stats, md_path, pdf_name, config, p_time, t
 def run_consensus(t_a_path, t_b_path, md_path, pdf_name, out_dir, config, p_time, verbose: bool = False):
     if verbose: print(f"\nStep 3: Mastering Consensus")
     t_a = load_json(t_a_path).get('references', [])
-    t_b = load_json(t_b_path).get('references', [])
+    t_b = []
+    if t_b_path and Path(t_b_path).exists():
+        t_b = load_json(t_b_path).get('references', [])
+    elif verbose:
+        print("→ Track B output unavailable; continuing with Track A only")
     try: source_text = Path(md_path).read_text(encoding='utf-8')
     except: source_text = ""
     

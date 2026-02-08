@@ -53,6 +53,8 @@ def run_pipeline(
     print(f"  SOURCE PDF:  {input_pdf.name}")
     print(f"  OUTPUT DIR:  {pdf_out}\n")
     
+    track_b_path = None
+
     try:
         # Stage 1: PDF to Markdown
         provider = config.get('conversion_provider', 'docling').capitalize()
@@ -98,6 +100,7 @@ def run_pipeline(
         except Exception as e:
             print_status("Track B Result", str(e), "WARN")
             results.append(["3. Track B", "0.00s", "FAIL"])
+            track_b_path = None
         
         print()  # Add spacing after Stage 2B
         
